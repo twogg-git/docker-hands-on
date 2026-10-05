@@ -1,6 +1,6 @@
 # Virtualization & Containers
 
-![virtualization](/utils_srcs/rsc_virtualization.png)
+![virtualization](utils/virtualization.png)
 
 ## What Is Virtualization?
 
@@ -100,10 +100,11 @@ Modern infrastructure relies on containers as the foundational unit of applicati
 | **WebAssembly (Wasm)** | WasmEdge, Wasmtime, Wasmer | Sandboxed Bytecode Execution | Edge computing, ultra-fast serverless with sub-millisecond cold starts.|
 | **Windows** | Docker (Windows), Hyper-V Runtimes | Windows Kernel / Hyper-V VM Boundary | Native .NET Framework and legacy Windows enterprise workloads |
 
+![poda](utils/advantages.png)
+
 ---
 
 # Strategic Selection & Coexistence Patterns
-
 
 ## When to Deploy Virtual Machines:
 
@@ -138,4 +139,4 @@ Modern infrastructure relies on containers as the foundational unit of applicati
 | **Density** | Low to moderate VMs per physical host server. | High to very high containers per physical host server. |
 | **Primary Use Case** | Running completely different OS kernels on one host, legacy monolithic apps, or multi-tenant hard isolation. | Cloud-native microservices, modern web apps, CI/CD pipelines, and rapid auto-scaling workloads. |
 
-![docker_flow](utils_srcs/rsc_docker_flow.png)
+![poda](utils/poda.png)

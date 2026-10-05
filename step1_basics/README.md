@@ -2,6 +2,8 @@
 
 Start with essential Docker CLI commands. 
 
+![basics](utils/basics.png)
+
 ## 1. Engine & Daemon Status
 Verify that the Docker daemon is running and check its global state.
 

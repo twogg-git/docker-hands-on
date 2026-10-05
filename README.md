@@ -27,7 +27,7 @@ Docker is an open-source platform that automates the deployment, scaling, and ex
 
 ## 2.  Architecture Diagram
 
-![docker_flow](utils_rscs/rsc_docker_flow.png)
+![docker_flow](/utils/docker_flow.png)
 
 ## Image Layers Work 
 
@@ -66,3 +66,5 @@ Docker images are structured as a stack of read-only intermediate layers. Each i
 | **Bind Mount** | Direct mapping of a host filesystem path into a container path. | Live Development | `docker run -v $(pwd):/app app:v1.0` |
 | **Network** | Software-defined network providing DNS name resolution between containers. | Virtual Bridge | `docker network create movie-net` |
 | **Registry** | Centralized distribution server storing and versioning container images. | Distribution | `docker push repo/app:v1.0` |
+
+![docker_flow](/utils/rsc_docker_flow.png)
