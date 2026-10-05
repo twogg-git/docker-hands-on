@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 # No external dependencies required for standard execution
+=======
+# No external dependencies required for standard execution
+>>>>>>> 1828357 (Initial commit)

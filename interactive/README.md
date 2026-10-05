@@ -72,4 +72,8 @@ docker logs postgres-db
 docker logs -f --tail 10 postgres-db
 
 docker stop postgres-db && docker rm postgres-db
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 1828357 (Initial commit)

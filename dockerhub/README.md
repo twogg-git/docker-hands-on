@@ -77,4 +77,8 @@ docker exec -it python-web-demo bash
 ### Stop and remove the container
 ```
 docker stop python-web-demo && docker rm python-web-demo
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 1828357 (Initial commit)
