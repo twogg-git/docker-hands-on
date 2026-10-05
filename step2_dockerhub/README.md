@@ -1,6 +1,8 @@
-# Interactive commands
+# DockerHub
 
 Now we are going to use commands that will run a database container, then we are going to inspect schemas, execute SQL queries, and manipulate live data in real time. Using tools like docker exec and native CLI clients like psql, you can seamlessly manage containerized databases without installing local database engines.
+
+![docker_hub](utils_srcs/rsc_dockerhub.png)
 
 ## Postgres plain container
 ```

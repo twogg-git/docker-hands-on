@@ -6,6 +6,8 @@ You will also cover Dockerfile best practices, database initialization scripts, 
 
 https://www.docker.com/products/docker-hub/
 
+![docker_logo](/step3_dockerfiles/web_app/static/docker.png)
+
 ### Colima
 We are going to use Colima locally in our OS, Colima is a container runtime for macOS (and Linux) with minimal setup. It supports Docker, Containerd, and Kubernetes out of the box.
 
@@ -24,45 +26,8 @@ Docker is an open-source platform that automates the deployment, scaling, and ex
 * **`containerd` & `runc`:** Low-level container runtimes. `containerd` manages the full container lifecycle (pulling images, execution management), while `runc` acts as the lightweight CLI tool for spawning containers according to the OCI specification using Linux kernel `namespaces` and `cgroups`.
 
 ## 2.  Architecture Diagram
-```
-+-------------------------------------------------------------------------+
-|                               HOST OS                                   |
-|                                                                         |
-|  +--------------------+                     +------------------------+  |
-|  |     Docker CLI     | --- REST API --->   |     Docker Daemon      |  |
-|  |  (User Commands)   |                     |       (dockerd)        |  |
-|  +--------------------+                     +-----------+------------+  |
-|                                                         |               |
-|                                                         v               |
-|                                             +------------------------+  |
-|                                             |       containerd       |  |
-|                                             +-----------+------------+  |
-|                                                         |               |
-|                                                         v               |
-|                                             +------------------------+  |
-|                                             |          runc          |  |
-|                                             +-----------+------------+  |
-|                                                         |               |
-|                                                         v               |
-|  +-------------------------------------------------------------------+  |
-|  |                         RUNNING CONTAINERS                        |  |
-|  |                                                                   |  |
-|  |  +---------------------+        +------------------------------+  |  |
-|  |  | Container 1 (Flask) |        | Container 2 (MongoDB)        |  |  |
-|  |  +---------------------+        +------------------------------+  |  |
-|  |  | R/W Container Layer |        | R/W Container Layer          |  |  |
-|  |  +---------------------+        +------------------------------+  |  |
-|  |  | Read-Only Image     |        | Read-Only Image              |  |  |
-|  |  | Layers (Shared)     |        | Layers (Shared)              |  |  |
-|  |  +---------------------+        +------------------------------+  |  |
-|  +-------------------------------------------------------------------+  |
-|                                                                         |
-|  +-------------------------------------------------------------------+  |
-|  |                      LINUX KERNEL PRIMITIVES                      |  |
-|  |   Namespaces (Process Isolation) | Control Groups (Resource Caps) |  |
-|  +-------------------------------------------------------------------+  |
-+-------------------------------------------------------------------------+
-```
+
+![docker_flow](utils_srcs/rsc_docker_flow.png)
 
 ## Image Layers Work 
 

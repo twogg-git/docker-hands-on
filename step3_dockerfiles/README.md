@@ -4,6 +4,8 @@ Dockerfile is a plain-text configuration file containing sequential instructions
 
 In this examples the Dockerfile serves as the build specification for both the Python apps. Instead of manually installing Python packages, copying code, or configuring web servers in a running shell every time, the Dockerfile codifies the runtime environment into a repeatable build artifact.
 
+![dockerfile](utils_srcs/rsc_dockerfile.png)
+
 ## Core Mechanics of a Dockerfile
 
 Base Image (FROM): Defines the starting operating system and language runtime layer (e.g., python:3.10-slim).

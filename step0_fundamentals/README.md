@@ -1,4 +1,6 @@
-# Virtualization
+# Virtualization & Containers
+
+![virtualization](utils_srcs/rsc_virtualization.png)
 
 ## What Is Virtualization?
 
@@ -135,3 +137,5 @@ Modern infrastructure relies on containers as the foundational unit of applicati
 | **Portability** | Limited by hypervisor format compatibility and large disk image sizes (GBs). | **High.** Standardized OCI images run identically on any runtime/OS with a compatible kernel. |
 | **Density** | Low to moderate VMs per physical host server. | High to very high containers per physical host server. |
 | **Primary Use Case** | Running completely different OS kernels on one host, legacy monolithic apps, or multi-tenant hard isolation. | Cloud-native microservices, modern web apps, CI/CD pipelines, and rapid auto-scaling workloads. |
+
+![docker_flow](utils_srcs/rsc_docker_flow.png)
