@@ -73,12 +73,3 @@ docker rmi -f $(docker images "python-web-demo" -q)
 
 docker images | grep python-web-demo
 ```
-
-
-GIT_SSH_COMMAND="ssh -i ~/.ssh/mactwogg -o IdentitiesOnly=yes" git push origin <branch-name>
-
-cat ~/.ssh/id_ed25518.pub
-
-sh -i ~/.ssh/id_ed25518 -o IdentitiesOnly=yes -T git@github.com
-
-GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25518 -o IdentitiesOnly=yes" git push origin main
