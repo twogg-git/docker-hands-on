@@ -115,15 +115,15 @@ curl -s "http://localhost:5001/api/movies?category=comedy"
 
 ## Step 6. Clean up the stack
 ```
-Stop and remove all 3 running containers
+# Stop and remove all 3 running containers
 docker rm -f movie-ui movie-api movie-db
 
-Delete custom Docker images
+# Delete custom Docker images
 docker rmi movie-frontend movie-backend
 
-Delete the custom network
+# Delete the custom network
 docker network rm movie-net
 
-Optional remove unused system caches and dangling resources
+# Optional remove unused system caches and dangling resources
 docker system prune -f
 ```

@@ -7,113 +7,97 @@ You will also cover Dockerfile best practices, database initialization scripts, 
 https://www.docker.com/products/docker-hub/
 
 ### Colima
-Colima is a container runtime for macOS (and Linux) with minimal setup. It supports Docker, Containerd, and Kubernetes out of the box.
+We are going to use Colima locally in our OS, Colima is a container runtime for macOS (and Linux) with minimal setup. It supports Docker, Containerd, and Kubernetes out of the box.
 
 https://colima.run/docs/getting-started/
 
 
-## 1. Engine & Daemon Status
-Verify that the Docker daemon is running and check its global state.
+## Introduction
 
-### Check if Docker daemon is responsive and view runtime metrics
-```
-docker info
-```
+Docker is an open-source platform that automates the deployment, scaling, and execution of applications inside lightweight, software-enforced containers. It virtualizes the host operating system kernel, bundling application code, runtime environments, system libraries, and configuration files into standardized, portable artifacts called **OCI (Open Container Initiative) Images**.
 
-### Display client and server version information
-```
-docker version
-```
+## Components
 
-### Check system resource utilization (disk usage by containers, images, volumes)
-```
-docker system df
-```
+* **Docker Daemon (`dockerd`):** The persistent background service running on the host that listens for Docker API requests. It manages images, containers, networks, and storage volumes.
+* **Docker CLI (`docker`):** The command-line interface used by engineers to interact with the daemon via REST API calls.
+* **Docker Registry (e.g., Docker Hub, AWS ECR):** A centralized or private store for publishing, versioning, and distributing container images.
+* **`containerd` & `runc`:** Low-level container runtimes. `containerd` manages the full container lifecycle (pulling images, execution management), while `runc` acts as the lightweight CLI tool for spawning containers according to the OCI specification using Linux kernel `namespaces` and `cgroups`.
 
-## 2. Quick Connectivity Test
-Run a lightweight, self-contained container to confirm Docker can pull images and execute containers successfully.
+## 2.  Architecture Diagram
 ```
-docker run --rm hello-world
-```
-
-## 3. Container Status & Health Check
-Inspect active, stopped, or failing containers.
-
-### List all RUNNING containers
-```
-docker ps
-```
-
-### List ALL containers (including exited and created)
-```
-docker ps -a
-```
-
-### View real-time resource usage (CPU, Memory, I/O) for running containers
-```
-docker stats --no-stream
-```
-
-## 4. Detached Background Container (Loops System Stats)
-Runs in the background (-d), stays active for 60 seconds (or indefinitely), and logs timestamped system information every 5 seconds.
-```
-docker run -d --name alpine-test alpine sh -c "
-  echo '=== Container Started ==='
-  uname -a
-  while true; do
-    echo \"[$(date)] Uptime: \$(uptime) | Mem Free: \$(free -m | grep Mem | awk '{print \$4}')MB\"
-    sleep 5
-  done
-"
++-------------------------------------------------------------------------+
+|                               HOST OS                                   |
+|                                                                         |
+|  +--------------------+                     +------------------------+  |
+|  |     Docker CLI     | --- REST API --->   |     Docker Daemon      |  |
+|  |  (User Commands)   |                     |       (dockerd)        |  |
+|  +--------------------+                     +-----------+------------+  |
+|                                                         |               |
+|                                                         v               |
+|                                             +------------------------+  |
+|                                             |       containerd       |  |
+|                                             +-----------+------------+  |
+|                                                         |               |
+|                                                         v               |
+|                                             +------------------------+  |
+|                                             |          runc          |  |
+|                                             +-----------+------------+  |
+|                                                         |               |
+|                                                         v               |
+|  +-------------------------------------------------------------------+  |
+|  |                         RUNNING CONTAINERS                        |  |
+|  |                                                                   |  |
+|  |  +---------------------+        +------------------------------+  |  |
+|  |  | Container 1 (Flask) |        | Container 2 (MongoDB)        |  |  |
+|  |  +---------------------+        +------------------------------+  |  |
+|  |  | R/W Container Layer |        | R/W Container Layer          |  |  |
+|  |  +---------------------+        +------------------------------+  |  |
+|  |  | Read-Only Image     |        | Read-Only Image              |  |  |
+|  |  | Layers (Shared)     |        | Layers (Shared)              |  |  |
+|  |  +---------------------+        +------------------------------+  |  |
+|  +-------------------------------------------------------------------+  |
+|                                                                         |
+|  +-------------------------------------------------------------------+  |
+|  |                      LINUX KERNEL PRIMITIVES                      |  |
+|  |   Namespaces (Process Isolation) | Control Groups (Resource Caps) |  |
+|  +-------------------------------------------------------------------+  |
++-------------------------------------------------------------------------+
 ```
 
-### View the generated info logs
+## Image Layers Work 
+
+Docker images are structured as a stack of read-only intermediate layers. Each instruction in a `Dockerfile` (`FROM`, `COPY`, `RUN`, `ENV`) creates a distinct, immutable filesystem layer stored as a SHA-256 hash digest.
 ```
-docker logs -f alpine-test
++-----------------------------------------------+
+   | Container Layer (Read/Write)                  | <- Ephemeral Runtime Data
+   +-----------------------------------------------+
+   | Layer 4: ENTRYPOINT ["python", "app.py"]     | <- Read-Only Image Layer
+   +-----------------------------------------------+
+   | Layer 3: COPY app.py .                        | <- Read-Only Image Layer
+   +-----------------------------------------------+
+   | Layer 2: RUN pip install -r requirements.txt   | <- Read-Only Image Layer
+   +-----------------------------------------------+
+   | Layer 1: FROM python:3.10-slim                | <- Base OS Kernel Interface
+   +-----------------------------------------------+
 ```
 
-### Check container status
-```
-docker ps -f name=alpine-test
-```
+## Key Principles
 
-### Tail live logs in real-time
-```
-docker logs -f --tail 50 alpine-test
-```
+1. **Layer Immutability & Caching:**
+   When rebuilding an image (`docker build`), Docker checks if host files match cached layers. If `requirements.txt` has not changed, Docker reuses Layer 2 from the cache, bypassing `pip install` entirely and accelerating build speeds.
+2. **Copy-on-Write (CoW) Driver:**
+   When a container is instantiated via `docker run`, Docker mounts a thin, writable **Container Layer** on top of the stack. If a process inside the container modifies a file located in a read-only lower layer, the Storage Driver (e.g., `overlay2`) copies the file up to the writable container layer before applying changes.
+3. **Storage Efficiency:**
+   Multiple running containers derived from the same base image share identical read-only layers in memory and disk storage, incurring zero duplication overhead.
 
-### Inspect detailed configuration, networking, and mount metadata
-```
-docker inspect alpine-test
-```
+## Reference Matrix
 
-### Check processes running inside a specific container
-```
-docker top alpine-test
-```
-
-### Stop and remove when done
-```
-docker stop alpine-test && docker rm alpine-test
-```
-
-## 5. NGINX / HTTP Echo (Stays Alive with Port Mapping)
-If you want to test networking and keep a container running indefinitely while showing host and process info:
-```
-docker run -d --name web-test -p 9090:80 nginx:alpine
-```
-
-### Verify status 
-```
-docker ps
-```
-
-### Test response 
-```
-http://localhost:9090
-```
-
-### Clean up 
-```
-docker rm -f web-test
-```
+| Concept | Description | Lifecycle / Scope | Primary Command Example |
+| :--- | :--- | :--- | :--- |
+| **Dockerfile** | Plain-text specification defining instructions to build an image. | Build Time | `vim Dockerfile` |
+| **Image** | An immutable, read-only stack of layers containing runtime binaries and code. | Static Artifact | `docker build -t app:v1.0 .` |
+| **Container** | A runnable instance of an image executing isolated processes on the host. | Ephemeral Runtime | `docker run -d -p 5000:5000 app:v1.0` |
+| **Volume** | Host-managed persistent storage decoupled from container lifecycle. | Persistent Storage | `docker volume create app-data` |
+| **Bind Mount** | Direct mapping of a host filesystem path into a container path. | Live Development | `docker run -v $(pwd):/app app:v1.0` |
+| **Network** | Software-defined network providing DNS name resolution between containers. | Virtual Bridge | `docker network create movie-net` |
+| **Registry** | Centralized distribution server storing and versioning container images. | Distribution | `docker push repo/app:v1.0` |
