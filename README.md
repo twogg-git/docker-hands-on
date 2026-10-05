@@ -27,7 +27,6 @@ Docker is an open-source platform that automates the deployment, scaling, and ex
 
 ## 2.  Architecture Diagram
 
-![docker_flow](/utils_srcs/rsc_docker_flow.png)
 ![docker_flow](utils_rscs/rsc_docker_flow.png)
 
 ## Image Layers Work 
