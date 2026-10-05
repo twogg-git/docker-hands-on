@@ -22,8 +22,4 @@ def test_mongo_operations_and_projection(mongo_db):
     thrillers = list(mongo_db.movies.find({"category": "thriller"}, {"_id": 0}))
     assert len(thrillers) == 2
     assert all("_id" not in movie for movie in thrillers)
-<<<<<<< HEAD
     assert any(m["title"] == "The Dark Knight" for m in thrillers)
-=======
-    assert any(m["title"] == "The Dark Knight" for m in thrillers)
->>>>>>> 1828357 (Initial commit)

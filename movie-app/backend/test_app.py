@@ -32,8 +32,4 @@ def test_get_movies_filtering_and_projection(client):
     # Test all movies fallback
     res_all = client.get("/api/movies")
     assert res_all.status_code == 200
-<<<<<<< HEAD
     assert res_all.get_json()["count"] == 2
-=======
-    assert res_all.get_json()["count"] == 2
->>>>>>> 1828357 (Initial commit)

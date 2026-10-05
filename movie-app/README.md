@@ -126,8 +126,4 @@ docker network rm movie-net
 
 Optional remove unused system caches and dangling resources
 docker system prune -f
-<<<<<<< HEAD
 ```
-=======
-```
->>>>>>> 1828357 (Initial commit)
