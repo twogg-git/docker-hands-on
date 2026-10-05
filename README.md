@@ -67,4 +67,3 @@ Docker images are structured as a stack of read-only intermediate layers. Each i
 | **Network** | Software-defined network providing DNS name resolution between containers. | Virtual Bridge | `docker network create movie-net` |
 | **Registry** | Centralized distribution server storing and versioning container images. | Distribution | `docker push repo/app:v1.0` |
 
-![docker_flow](/utils/rsc_docker_flow.png)
