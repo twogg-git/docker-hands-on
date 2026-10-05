@@ -1,10 +1,8 @@
 # Virtualization & Containers
 
-![virtualization](utils/virtualization.png)
-
-## What Is Virtualization?
-
 Virtualization is a technology that allows you to create simulated, software-based representations of physical hardware—including CPUs, memory, storage, and network interfaces. It decouples the operating system and applications from the underlying physical host machine, enabling a single physical server to execute multiple isolated virtual environments (Virtual Machines or VMs) simultaneously.
+
+![virtualization](utils/virtualization.png)
 
 ## Why Do We Need It?
 
@@ -52,9 +50,10 @@ Runs as an application layer on top of a conventional host operating system.
 
 # Containers
 
-## Intro & Definition
-
 Containers are lightweight, standalone units of software that package application code alongside all of its dependencies, libraries, configuration files, and runtime binaries. Unlike virtualization, containers do not virtualize the underlying hardware; instead, they virtualize the host operating system, sharing a single OS kernel while maintaining execution environment isolation.
+
+![advantages](utils/advantages.png)
+
 
 ## Brief History
 
@@ -100,11 +99,12 @@ Modern infrastructure relies on containers as the foundational unit of applicati
 | **WebAssembly (Wasm)** | WasmEdge, Wasmtime, Wasmer | Sandboxed Bytecode Execution | Edge computing, ultra-fast serverless with sub-millisecond cold starts.|
 | **Windows** | Docker (Windows), Hyper-V Runtimes | Windows Kernel / Hyper-V VM Boundary | Native .NET Framework and legacy Windows enterprise workloads |
 
-![poda](utils/advantages.png)
 
 ---
 
 # Strategic Selection & Coexistence Patterns
+
+![poda](utils/poda.png)
 
 ## When to Deploy Virtual Machines:
 
@@ -139,4 +139,3 @@ Modern infrastructure relies on containers as the foundational unit of applicati
 | **Density** | Low to moderate VMs per physical host server. | High to very high containers per physical host server. |
 | **Primary Use Case** | Running completely different OS kernels on one host, legacy monolithic apps, or multi-tenant hard isolation. | Cloud-native microservices, modern web apps, CI/CD pipelines, and rapid auto-scaling workloads. |
 
-![poda](utils/poda.png)
