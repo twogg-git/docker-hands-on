@@ -1,6 +1,6 @@
 # Virtualization & Containers
 
-![virtualization](./utils_srcs/rsc_virtualization.png)
+![virtualization](/utils_srcs/rsc_virtualization.png)
 
 ## What Is Virtualization?
 
